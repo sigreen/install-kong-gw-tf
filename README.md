@@ -8,18 +8,20 @@ This example stands up a simple Azure AKS cluster, then installs Kong Gateway En
 2. Terraform CLI
 3. Azure CLI
 4. AKS Domain name
+5. Kong Enterprise license
 
 ## Procedure
 
-1. Open `/tf-provision-aks/aks-cluster.tf` to search & replace `simongreen` with your own name.  That way, all AKS objects will be tagged with your name making them easily searchable. Also, update the Azure region in this file to the region of your choice.
-2. If you haven't done so already, create an Active Directory service principal account via the CLI:
+1. Update license under ./license/license of this directory.
+2. Open `/tf-provision-aks/aks-cluster.tf` to search & replace `simongreen` with your own name.  That way, all AKS objects will be tagged with your name making them easily searchable. Also, update the Azure region in this file to the region of your choice.
+3. If you haven't done so already, create an Active Directory service principal account via the CLI:
 
  ```bash
  az login
  az ad sp create-for-rbac --skip-assignment`.  # This will give you the `appId` and `password` that Terraform requires to provision AKS.
  ```
 
-3.  In `/tf-provision/aks` directory, create a file called `terraform.tfvars`.  Enter the following text, using your credentials from the previous command:
+4.  In `/tf-provision/aks` directory, create a file called `terraform.tfvars`.  Enter the following text, using your credentials from the previous command:
 
 ```bash
 appId    = "******"
@@ -27,7 +29,7 @@ password = "******"
 location = "East US"
 ```
 
-4. In the root directory, create session configurations. Make sure to change "cookie_domain" in each to your AKS location e.g. `.eastus.cloudapp.azure.com`:
+5. In the root directory, create session configurations. Make sure to change "cookie_domain" in each to your AKS location e.g. `.eastus.cloudapp.azure.com`:
 
 ```bash
 echo '{"cookie_name":"admin_session","cookie_domain": ".eastus.cloudapp.azure.com","cookie_samesite":"off","secret":"password","cookie_secure":false,"storage":"kong"}' > admin_gui_session_conf
@@ -35,15 +37,15 @@ echo '{"cookie_name":"admin_session","cookie_domain": ".eastus.cloudapp.azure.co
 echo '{"cookie_name":"portal_session","cookie_domain": ".eastus.cloudapp.azure.com","cookie_samesite":"off","secret":"password","cookie_secure":false,"storage":"kong"}' > portal_session_conf
 ```
 
-5. Search and replace 'simongreen' for a unique tag in the `/tf-provision-aks/aks-cluster.tf` file.
-6. Via the CLI, `cd tf-provision-aks/` then run the following Terraform commands to provisions AKS:
+6. Search and replace 'simongreen' for a unique tag in the `/tf-provision-aks/aks-cluster.tf` file.
+7. Via the CLI, `cd tf-provision-aks/` then run the following Terraform commands to provisions AKS:
 
 ```bash
 terraform init
 terraform apply
 ```
 
-7. Once terraform has stoodup AKS, setup `kubectl` to point to your new AKS instance:
+8. Once terraform has stoodup AKS, setup `kubectl` to point to your new AKS instance:
 
 ```bash
 az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
