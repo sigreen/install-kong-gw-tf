@@ -127,6 +127,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 license
+admin_gui_session_conf
+portal_session_conf
 
 # Include override files you do wish to add to version control using negated pattern
 #

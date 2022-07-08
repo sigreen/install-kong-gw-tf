@@ -80,3 +80,16 @@ resource "helm_release" "kong" {
     kubernetes_namespace.kong
   ]
 }
+
+data "kubectl_filename_list" "manifests" {
+    pattern = "./../crd/*.yaml"
+}
+
+resource "kubectl_manifest" "my_kong_crd_config" {
+    count = length(data.kubectl_filename_list.manifests.matches)
+    yaml_body = file(element(data.kubectl_filename_list.manifests.matches, count.index))
+    override_namespace = "kong"
+  depends_on = [
+    helm_release.kong
+  ]
+}

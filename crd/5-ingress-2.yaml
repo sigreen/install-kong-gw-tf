@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: proxy-from-k8s-to-httpbin
+  annotations:
+    konghq.com/strip-path: "false"
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: rate-limiting-advanced-example
+spec:
+  ingressClassName: kong
+  rules:
+  - http:
+      paths:
+      - path: /anything
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: httpbin
+            port:
+              number: 80

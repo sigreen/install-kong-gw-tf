@@ -12,7 +12,7 @@ This example stands up a simple Azure AKS cluster, then installs Kong Gateway En
 
 ## Procedure
 
-1. Update license under ./license/license of this directory.
+1. Update license under `./license/license` of this directory.
 2. Open `/tf-provision-aks/aks-cluster.tf` to search & replace `simongreen` with your own name.  That way, all AKS objects will be tagged with your name making them easily searchable. Also, update the Azure region in this file to the region of your choice.
 3. If you haven't done so already, create an Active Directory service principal account via the CLI:
 

@@ -1,0 +1,18 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-advanced-example
+config: 
+  limit:
+  - 5
+  window_size:
+  - 30
+  identifier: consumer
+  dictionary_name: kong_rate_limiting_counters
+  sync_rate: -1
+  strategy: local
+  hide_client_headers: false
+  window_type: sliding
+  namespace: random_auto_generated_string
+  retry_after_jitter_max: 0
+plugin: rate-limiting-advanced
